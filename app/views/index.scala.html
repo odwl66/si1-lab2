@@ -1,17 +1,54 @@
 @(message: String)
 
 @main("Metas Semanais") {
-    <div>
-        <h1>@message</h1>
-    </div>
+    <head>
+        <title>Metas Semanais</title>
+        <meta charset="UTF-8">
 
-    <button>Adicionar meta</button>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" media="screen">
+    </head>
 
-    <div>
-        <div>
-            <h3>Semana 1</h3>
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1>Metas Semanais</h1>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-success">Adicionar meta</button>
+
+        <br/>
+        <br/>
+
+        <div class="panel-primary">
+            <div class="panel-heading">
+                <h2>Semana 1</h3>
+            </div>
+            <div class="panel-body">
+                <div class="panel-success">
+                    <div class="panel-heading">
+                        <h3>-Metas Alcançadas</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li> Meta 1</li>
+                            <li>Meta 2</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel-info">
+                    <div class="panel-heading">
+                        <h3>-Metas à Alcançar</h3>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ol>
+                        <li> Meta 1</li>
+                        <li>Meta 2</li>
+                    </ol>
+                </div>
+            </div>
         </div>
     </div>
-
-
 }

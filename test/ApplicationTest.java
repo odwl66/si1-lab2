@@ -36,9 +36,9 @@ public class ApplicationTest {
 
     @Test
     public void renderTemplate() {
-        Content html = views.html.index.render("Metas a cumprir");
+        Content html = views.html.index.render("Metas Semanais");
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Metas a cumprir");
+        assertThat(contentAsString(html)).contains("Metas Semanais");
     }
 
 

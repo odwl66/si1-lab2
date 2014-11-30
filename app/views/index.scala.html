@@ -6,49 +6,91 @@
         <meta charset="UTF-8">
 
         <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" media="screen">
+        <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
     </head>
 
-    <div class="container">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h1>Metas Semanais</h1>
+    <body>
+        <div class="container">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="text-center">Metas Semanais</h1>
+                </div>
             </div>
-        </div>
 
-        <button type="button" class="btn btn-success">Adicionar meta</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                Adicionar meta
+            </button>
 
-        <br/>
-        <br/>
+            <br/>
+            <br/>
 
-        <div class="panel-primary">
-            <div class="panel-heading">
-                <h2>Semana 1</h3>
-            </div>
-            <div class="panel-body">
-                <div class="panel-success">
-                    <div class="panel-heading">
-                        <h3>-Metas Alcançadas</h3>
-                    </div>
-                    <div class="panel-body">
-                        <ul>
-                            <li> Meta 1</li>
-                            <li>Meta 2</li>
-                        </ul>
-                    </div>
+            <div class="panel-primary">
+                <div class="panel-heading">
+                    <h2 class="text-center">Semana 1</h2>
                 </div>
 
-                <div class="panel-info">
-                    <div class="panel-heading">
-                        <h3>-Metas à Alcançar</h3>
-                    </div>
-                </div>
                 <div class="panel-body">
-                    <ol>
-                        <li> Meta 1</li>
-                        <li>Meta 2</li>
-                    </ol>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel-success">
+                                <div class="panel-heading">
+                                    <h3>-Metas Alcançadas</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ul>
+                                        <li> Meta 1</li>
+                                        <li>Meta 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel-info">
+                                <div class="panel-heading">
+                                    <h3>-Metas à Alcançar</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ol>
+                                        <li> Meta 1</li>
+                                        <li>Meta 2</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+            <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Adicionar Meta</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <span class="input-group-addon">Descrição</span>
+                            <input type="text" class="form-control" placeholder="Digite a descrição da sua meta">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Semana</span>
+                            <input type="number" class="form-control" placeholder="Digite a semana da sua meta(1 - 6)">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Prioridade</span>
+                            <input type="number" class="form-control" placeholder="Digite a prioridade da sua meta(0 - 5)">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 }

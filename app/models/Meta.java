@@ -11,6 +11,10 @@ import java.io.Serializable;
 public class Meta implements Serializable, Comparable<Meta>{
 
     @Id
+    @GeneratedValue
+    @Column
+    private Long id;
+
     @Column
     private String descricao;
     @Column
@@ -89,5 +93,13 @@ public class Meta implements Serializable, Comparable<Meta>{
         }
 
         return comparacao1;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

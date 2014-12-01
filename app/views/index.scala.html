@@ -1,4 +1,4 @@
-@(message: String)
+@(metas: List[Meta])
 
 @main("Metas Semanais") {
     <head>
@@ -14,7 +14,7 @@
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h1 class="text-center">Metas Semanais</h1>
+                    <h1 class="text-center">Metas Semanais - @(metas.size() - 1) meta(s) </h1>
                 </div>
             </div>
 
@@ -24,72 +24,110 @@
 
             <br/>
             <br/>
-
-            <div class="panel-primary">
-                <div class="panel-heading">
-                    <h2 class="text-center">Semana 1</h2>
-                </div>
-
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="panel-success">
-                                <div class="panel-heading">
-                                    <h3>-Metas Alcançadas</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <ul>
-                                        <li> Meta 1</li>
-                                        <li>Meta 2</li>
-                                    </ul>
-                                </div>
-                            </div>
+            @for(semana <- 1 to 6){
+                @if(0 != metas.filter(m => m.getSemana == semana).size) {
+                    <div class="panel-primary">
+                        <div class="panel-heading">
+                            <h2 class="text-center">Semana @semana </h2>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="panel-info">
-                                <div class="panel-heading">
-                                    <h3>-Metas à Alcançar</h3>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="panel-success">
+                                        <div class="panel-heading">
+                                            <h4>-Metas Alcançadas</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul>
+                                            @if(0 == metas.filter(m => m.getSemana == semana && m.isAlcancada).size) {
+                                                Nenhuma meta alcançada
+                                            } else {
+                                                @for(meta <- metas) {
+                                                    @if(meta.isAlcancada() && meta.getSemana() == semana) {
+                                                        <li>
+                                                            Descrição: @meta.getDescricao() (@meta.getPrioridade())
+                                                            <button class="btn btn-success btn-group-xs">Concluir</button>
+                                                            <button class="btn btn-danger btn-group-xs">Desistir</button>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="panel-body">
-                                    <ol>
-                                        <li> Meta 1</li>
-                                        <li>Meta 2</li>
-                                    </ol>
+                                <div class="col-sm-6">
+                                    <div class="panel-info">
+                                        <div class="panel-heading">
+                                            <h4>-Metas à Alcançar</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ol>
+                                            @if(0 == metas.filter(m => m.getSemana == semana && !m.isAlcancada).size) {
+                                                Nenhuma meta para alcançar
+                                            } else {
+                                                @for(meta <- metas) {
+                                                    @if(!meta.isAlcancada() && meta.getSemana() == semana) {
+                                                        <li>
+                                                            @meta.getDescricao() (@meta.getPrioridade())
+                                                            <button class="btn btn-success btn-group-xs">Concluir</button>
+                                                            <button class="btn btn-danger btn-group-xs">Desistir</button>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                            </ol>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                }
+            }
+
+
+
+
+
+
         </div>
 
             <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Adicionar Meta</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group">
-                            <span class="input-group-addon">Descrição</span>
-                            <input type="text" class="form-control" placeholder="Digite a descrição da sua meta">
+                <form id="form" action="@routes.Application.novaMeta()" method="post" >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Adicionar Meta</h4>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">Semana</span>
-                            <input type="number" class="form-control" placeholder="Digite a semana da sua meta(1 - 6)">
+                        <div class="modal-body">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon">Descrição</span>
+                                    <input type="text" name="descricao" class="form-control" placeholder="Digite a descrição da sua meta" required="required">
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Semana</span>
+                                    <input type="number" name="semana" class="form-control" placeholder="Digite a semana da sua meta(1 - 6)" required="required">
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Prioridade</span>
+                                    <input type="number" name="prioridade" class="form-control" placeholder="Digite a prioridade da sua meta(0 - 5)" required="required">
+                                </div>
+
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">Prioridade</span>
-                            <input type="number" class="form-control" placeholder="Digite a prioridade da sua meta(0 - 5)">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
                         </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary">Adicionar</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </body>

@@ -1,9 +1,10 @@
-package controllers;
-
-import play.*;
+import java.util.List;
 
 import models.Meta;
 import models.dao.GenericDAO;
+import play.Application;
+import play.GlobalSettings;
+import play.Logger;
 import play.db.jpa.JPA;
 
 public class Global extends GlobalSettings {
@@ -20,7 +21,7 @@ public class Global extends GlobalSettings {
                 Meta meta1 = new Meta("Fazer o lab", 1, 5);
                 Meta meta2 = new Meta("Aprender o play", 1, 4);
                 Meta meta3 = new Meta("Fazer os testes do lab", 1, 2);
-                Meta meta4 = new Meta("Parar de fumar", 3, 5);
+                Meta meta4 = new Meta("Estudar mais", 3, 5);
                 Meta meta5 = new Meta("Dormir mais", 2, 5);
                 Meta meta6 = new Meta("Parar de fumar", 3, 5);
                 Meta meta7 = new Meta("Emagrecer", 3, 2);
@@ -45,5 +46,19 @@ public class Global extends GlobalSettings {
                 dao.flush();
             }
         });
+    }
+
+    @Override
+    public void onStop(Application app){
+        JPA.withTransaction(new play.libs.F.Callback0() {
+            @Override
+            public void invoke() throws Throwable {
+                Logger.info("Aplicação finalizada...");
+                List<Meta> metas = dao.findAllByClass(Meta.class);
+
+                for (Meta meta : metas) {
+                    dao.removeById(Meta.class, meta.getId());
+                }
+            }});
     }
 }

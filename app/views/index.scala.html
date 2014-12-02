@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <ul>
-                                            @if(0 == metas.filter(m => m.getSemana == semana && m.isAlcancada).size) {
+                                            @if(0 == metas.count(m => m.getSemana == semana && m.isAlcancada)) {
                                                 Nenhuma meta alcançada
                                             } else {
                                                 @for(meta <- metas) {
@@ -63,20 +63,21 @@
                                         </div>
                                         <div class="panel-body">
                                             <ol>
-                                            @if(0 == metas.filter(m => m.getSemana == semana && !m.isAlcancada).size) {
+                                            @if(0 == metas.count(m => m.getSemana == semana && !m.isAlcancada)) {
                                                 Nenhuma meta para alcançar
                                             } else {
                                                 @for(meta <- metas) {
                                                     @if(!meta.isAlcancada() && meta.getSemana() == semana) {
                                                         <li>
                                                             @meta.getDescricao() (@meta.getPrioridade())
-                                                            <form action="@routes.Application.alcancarMeta(meta.getId())" method="post">
+                                                            <form class="pull-right" action="@routes.Application.alcancarMeta(meta.getId())" method="post">
                                                                 <button type="submit" class="btn btn-sm btn-success" value="Concluir">Concuir</button>
                                                             </form>
-                                                            <form action="@routes.Application.deleteMetas(meta.getId())" method="post">
+                                                            <form class="pull-right" action="@routes.Application.deleteMetas(meta.getId())" method="post">
                                                                 <button type="submit" class="btn btn-sm btn-danger" value="Delete">Desistir</button>
                                                             </form>
                                                         </li>
+                                                        <br/>
                                                     }
                                                 }
                                             }
@@ -115,12 +116,26 @@
                                 <br/>
                                 <div class="input-group">
                                     <span class="input-group-addon">Semana</span>
-                                    <input type="number" name="semana" class="form-control" placeholder="Digite a semana da sua meta(1 - 6)" required="required">
+                                    <select class="form-control" name="semana" >
+                                        <option value="1">Semana 1</option>
+                                        <option value="2">Semana 2</option>
+                                        <option value="3">Semana 3</option>
+                                        <option value="4">Semana 4</option>
+                                        <option value="5">Semana 5</option>
+                                        <option value="6">Semana 6</option>
+                                    </select>
                                 </div>
                                 <br/>
                                 <div class="input-group">
                                     <span class="input-group-addon">Prioridade</span>
-                                    <input type="number" name="prioridade" class="form-control" placeholder="Digite a prioridade da sua meta(0 - 5)" required="required">
+                                    <select class="form-control" name="prioridade" >
+                                        <option value="0">Prioridade 0</option>
+                                        <option value="1">Prioridade 1</option>
+                                        <option value="2">Prioridade 2</option>
+                                        <option value="3">Prioridade 3</option>
+                                        <option value="4">Prioridade 4</option>
+                                        <option value="5">Prioridade 5</option>
+                                    </select>
                                 </div>
 
                         </div>

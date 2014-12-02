@@ -7,9 +7,6 @@ import play.data.Form;
 import play.db.jpa.Transactional;
 import play.mvc.*;
 
-import views.html.*;
-
-import java.util.Collections;
 import java.util.List;
 
 public class Application extends Controller {
@@ -17,17 +14,15 @@ public class Application extends Controller {
     private static Form<Meta> metaForm = Form.form(Meta.class);
     private static final GenericDAO dao = new GenericDAO();
 
-//    @Transactional
-//    public static Result metas() {
-//        List<Meta> result = dao.findAllByClass(Meta.class);
-//        return ok(views.html.index.render(result));
-//    }
+    @Transactional
+    public static Result metas() {
+        List<Meta> result = dao.findAllByClass(Meta.class);
+        return ok(views.html.index.render(result));
+    }
 
     @Transactional
     public static Result index() {
-        List<Meta> metas = dao.findAllByClass(Meta.class);
-        Collections.sort(metas);
-        return ok(views.html.index.render(metas));
+        return metas();
     }
 
     @Transactional
@@ -46,7 +41,7 @@ public class Application extends Controller {
 
             dao.flush();
 
-            return redirect(routes.Application.index());
+            return metas();
         }
     }
 
@@ -54,7 +49,7 @@ public class Application extends Controller {
     public static Result deleteMetas(long id) {
         dao.removeById(Meta.class, id);
         dao.flush();
-        return redirect(routes.Application.index());
+        return metas();
     }
 
     @Transactional
@@ -75,7 +70,7 @@ public class Application extends Controller {
 
             dao.flush();
 
-            return redirect(routes.Application.index());
+            return metas();
         }
     }
 }

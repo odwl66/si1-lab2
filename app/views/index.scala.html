@@ -8,13 +8,14 @@
         <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" media="screen">
         <script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/inputvalidator.js")"></script>
     </head>
 
     <body>
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h1 class="text-center">Metas Semanais - @(metas.size() - 1) meta(s) </h1>
+                    <h1 class="text-center">Metas Semanais - @(metas.size) meta(s) </h1>
                 </div>
             </div>
 
@@ -25,10 +26,10 @@
             <br/>
             <br/>
             @for(semana <- 1 to 6){
-                @if(0 != metas.filter(m => m.getSemana == semana).size) {
+                @if(0 != metas.count(m => m.getSemana == semana)) {
                     <div class="panel-primary">
                         <div class="panel-heading">
-                            <h2 class="text-center">Semana @semana </h2>
+                            <h2 class="text-center">Semana @semana - @metas.count(m => m.getSemana == semana && m.isAlcancada)/@metas.count(m => m.getSemana == semana) </h2>
                         </div>
 
                         <div class="panel-body">
@@ -46,9 +47,7 @@
                                                 @for(meta <- metas) {
                                                     @if(meta.isAlcancada() && meta.getSemana() == semana) {
                                                         <li>
-                                                            Descrição: @meta.getDescricao() (@meta.getPrioridade())
-                                                            <button class="btn btn-success btn-group-xs">Concluir</button>
-                                                            <button class="btn btn-danger btn-group-xs">Desistir</button>
+                                                            @meta.getDescricao() (@meta.getPrioridade())
                                                         </li>
                                                     }
                                                 }
@@ -71,8 +70,12 @@
                                                     @if(!meta.isAlcancada() && meta.getSemana() == semana) {
                                                         <li>
                                                             @meta.getDescricao() (@meta.getPrioridade())
-                                                            <button class="btn btn-success btn-group-xs">Concluir</button>
-                                                            <button class="btn btn-danger btn-group-xs">Desistir</button>
+                                                            <form action="@routes.Application.alcancarMeta(meta.getId())" method="post">
+                                                                <button type="submit" class="btn btn-sm btn-success" value="Concluir">Concuir</button>
+                                                            </form>
+                                                            <form action="@routes.Application.deleteMetas(meta.getId())" method="post">
+                                                                <button type="submit" class="btn btn-sm btn-danger" value="Delete">Desistir</button>
+                                                            </form>
                                                         </li>
                                                     }
                                                 }

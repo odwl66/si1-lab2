@@ -17,6 +17,12 @@ public class Application extends Controller {
     private static Form<Meta> metaForm = Form.form(Meta.class);
     private static final GenericDAO dao = new GenericDAO();
 
+//    @Transactional
+//    public static Result metas() {
+//        List<Meta> result = dao.findAllByClass(Meta.class);
+//        return ok(views.html.index.render(result));
+//    }
+
     @Transactional
     public static Result index() {
         List<Meta> metas = dao.findAllByClass(Meta.class);
@@ -26,7 +32,6 @@ public class Application extends Controller {
 
     @Transactional
     public static Result novaMeta() {
-        // O formulário dos Livros Preenchidos
         Form<Meta> filledForm = metaForm.bindFromRequest();
 
         if (filledForm.hasErrors()) {
@@ -36,22 +41,41 @@ public class Application extends Controller {
         } else {
             Meta novaMeta = filledForm.get();
             Logger.debug("Criando meta: " + filledForm.data().toString() + " como " + novaMeta.getDescricao());
-            // Persiste o Livro criado
+
             dao.persist(novaMeta);
-            // Espelha no Banco de Dados
+
             dao.flush();
-            /*
-             * Usar routes.Application.<uma action> é uma forma de
-             * evitar colocar rotas literais (ex: "/books")
-             * hard-coded no código. Dessa forma, se mudamos no
-             * arquivo routes, continua funcionando.
-             */
+
             return redirect(routes.Application.index());
         }
     }
 
-//    public static Result metas() {
-//        List<Meta> result = dao.findAllByClass(Meta.class);
-//        return ok(views.html.index.render(result));
-//    }
+    @Transactional
+    public static Result deleteMetas(long id) {
+        dao.removeById(Meta.class, id);
+        dao.flush();
+        return redirect(routes.Application.index());
+    }
+
+    @Transactional
+    public static Result alcancarMeta(long id) {
+
+        Form<Meta> filledForm = metaForm.bindFromRequest();
+
+        if (filledForm.hasErrors()) {
+            List<Meta> result = dao.findAllByClass(Meta.class);
+
+            return badRequest(views.html.index.render(result));
+        } else {
+            Meta meta = dao.findByEntityId(Meta.class, id);
+            meta.setAlcancada(true);
+            Logger.debug("Deletando meta: " + filledForm.data().toString() + " como " + meta.getDescricao());
+
+            dao.merge(meta);
+
+            dao.flush();
+
+            return redirect(routes.Application.index());
+        }
+    }
 }

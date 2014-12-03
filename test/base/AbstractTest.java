@@ -1,3 +1,5 @@
+package base;
+
 import javax.persistence.EntityManager;
 
 import org.junit.After;

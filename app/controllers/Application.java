@@ -7,6 +7,7 @@ import play.data.Form;
 import play.db.jpa.Transactional;
 import play.mvc.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Application extends Controller {
@@ -17,6 +18,7 @@ public class Application extends Controller {
     @Transactional
     public static Result metas() {
         List<Meta> result = dao.findAllByClass(Meta.class);
+        Collections.sort(result);
         return ok(views.html.index.render(result));
     }
 
@@ -31,7 +33,7 @@ public class Application extends Controller {
 
         if (filledForm.hasErrors()) {
             List<Meta> result = dao.findAllByClass(Meta.class);
-
+            Collections.sort(result);
             return badRequest(views.html.index.render(result));
         } else {
             Meta novaMeta = filledForm.get();

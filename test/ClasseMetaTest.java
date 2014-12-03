@@ -4,7 +4,7 @@ import org.junit.*;
 /**
  * Created by orion on 29/11/14.
  */
-public class MetaTest {
+public class ClasseMetaTest {
     @Test
     public void testaConstrutor(){
         try {

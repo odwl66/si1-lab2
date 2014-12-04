@@ -43,7 +43,7 @@ public class ApplicationTest {
     public void renderTemplate() {
         Content html = views.html.index.render(metas);
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Metas Semanais");
+        assertThat(contentAsString(html)).contains("Metas Semanais - 0 meta(s)");
     }
 
 

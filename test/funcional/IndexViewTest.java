@@ -2,6 +2,7 @@ package funcional;
 
 import base.AbstractTest;
 import models.Meta;
+import models.Utils;
 import models.dao.GenericDAO;
 import org.junit.Test;
 import play.mvc.Result;
@@ -25,6 +26,7 @@ public class IndexViewTest extends AbstractTest{
     GenericDAO dao = new GenericDAO();
 
     List<Meta> metas = new LinkedList<Meta>();
+    Utils util = new Utils();
 
     @Test
     public void deveCadastrarMeta(){
@@ -35,11 +37,13 @@ public class IndexViewTest extends AbstractTest{
         Result result = callAction(controllers.routes.ref.Application.novaMeta(), fakeRequest().withFormUrlEncodedBody(formulario));
 
         metas = dao.findAllByClass(Meta.class);
+        Meta meta = metas.get(0);
 
         assertThat(metas.size()).isEqualTo(1);
-        assertThat(metas.get(0).getDescricao()).isEqualTo("Meta 1");
-        assertThat(metas.get(0).getPrioridade()).isEqualTo(3);
-        assertThat(metas.get(0).getSemana()).isEqualTo(1);
+        assertThat(meta.getDescricao()).isEqualTo("Meta 1");
+        assertThat(meta.getPrioridade()).isEqualTo(3);
+        assertFalse(meta.isAlcancada());
+        assertThat(meta.getSemana()).isEqualTo(1);
     }
 
     @Test
@@ -118,7 +122,7 @@ public class IndexViewTest extends AbstractTest{
 
         metas = dao.findAllByClass(Meta.class);
 
-        Html html = index.render(metas);
+        Html html = index.render(metas, util);
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("Metas Semanais - 1 meta(s)");
         assertThat(contentAsString(html)).contains("Semana 3 - 0/1");
@@ -159,7 +163,7 @@ public class IndexViewTest extends AbstractTest{
 
         metas = dao.findAllByClass(Meta.class);
 
-        Html html = index.render(metas);
+        Html html = index.render(metas, util);
         assertThat(contentAsString(html)).contains("Concluir");
 
         assertFalse(metas.get(0).isAlcancada());
@@ -170,7 +174,7 @@ public class IndexViewTest extends AbstractTest{
         dao.merge(meta);
         dao.flush();
         metas = dao.findAllByClass(Meta.class);
-        html = index.render(metas);
+        html = index.render(metas, util);
         assertThat(contentAsString(html)).doesNotContain("Concluir");
     }
 }

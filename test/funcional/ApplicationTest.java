@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Meta;
+import models.Utils;
 import org.junit.*;
 
 import play.mvc.*;
@@ -32,6 +33,7 @@ import static org.fest.assertions.Assertions.*;
 public class ApplicationTest {
 
     List<Meta> metas = new ArrayList<Meta>();
+    Utils util = new Utils();
 
     @Test
     public void simpleCheck() {
@@ -41,7 +43,7 @@ public class ApplicationTest {
 
     @Test
     public void renderTemplate() {
-        Content html = views.html.index.render(metas);
+        Content html = views.html.index.render(metas, util);
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("Metas Semanais - 0 meta(s)");
     }

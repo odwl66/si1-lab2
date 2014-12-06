@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Meta;
+import models.Utils;
 import models.dao.GenericDAO;
 import play.*;
 import play.data.Form;
@@ -14,12 +15,13 @@ public class Application extends Controller {
 
     private static Form<Meta> metaForm = Form.form(Meta.class);
     private static final GenericDAO dao = new GenericDAO();
+    private static Utils util = new Utils();
 
     @Transactional
     public static Result metas() {
         List<Meta> result = dao.findAllByClass(Meta.class);
         Collections.sort(result);
-        return ok(views.html.index.render(result));
+        return ok(views.html.index.render(result, util));
     }
 
     @Transactional
@@ -34,7 +36,7 @@ public class Application extends Controller {
         if (filledForm.hasErrors()) {
             List<Meta> result = dao.findAllByClass(Meta.class);
             Collections.sort(result);
-            return badRequest(views.html.index.render(result));
+            return badRequest(views.html.index.render(result, util));
         } else {
             Meta novaMeta = filledForm.get();
             Logger.debug("Criando meta: " + filledForm.data().toString() + " como " + novaMeta.getDescricao());
@@ -62,7 +64,7 @@ public class Application extends Controller {
         if (filledForm.hasErrors()) {
             List<Meta> result = dao.findAllByClass(Meta.class);
 
-            return badRequest(views.html.index.render(result));
+            return badRequest(views.html.index.render(result, util));
         } else {
             Meta meta = dao.findByEntityId(Meta.class, id);
             meta.setAlcancada(true);

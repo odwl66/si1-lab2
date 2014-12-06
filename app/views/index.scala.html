@@ -1,4 +1,4 @@
-@(metas: List[Meta])
+@(metas: List[Meta])(util: Utils)
 
 @main("Metas Semanais") {
     <head>
@@ -26,10 +26,10 @@
             <br/>
             <br/>
             @for(semana <- 1 to 6){
-                @if(0 != metas.count(m => m.getSemana == semana)) {
+                @if(0 != util.quantidadeDeMetasNaSemana(semana, metas)) {
                     <div class="panel-primary">
                         <div class="panel-heading">
-                            <h2 class="text-center">Semana @semana - @metas.count(m => m.getSemana == semana && m.isAlcancada)/@metas.count(m => m.getSemana == semana) </h2>
+                            <h2 class="text-center">Semana @semana - @util.quantidadeDeMetasAlcancadasNaSemana(semana, metas)/@util.quantidadeDeMetasNaSemana(semana, metas) </h2>
                         </div>
 
                         <div class="panel-body">
@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <ul>
-                                            @if(0 == metas.count(m => m.getSemana == semana && m.isAlcancada)) {
+                                            @if(0 == util.quantidadeDeMetasAlcancadasNaSemana(semana, metas)) {
                                                 Nenhuma meta alcançada
                                             } else {
                                                 @for(meta <- metas) {
@@ -59,11 +59,11 @@
                                 <div class="col-sm-6">
                                     <div class="panel-info">
                                         <div class="panel-heading">
-                                            <h4>-Metas à Alcançar</h4>
+                                            <h4>-Metas a Alcançar</h4>
                                         </div>
                                         <div class="panel-body">
                                             <ol>
-                                            @if(0 == metas.count(m => m.getSemana == semana && !m.isAlcancada)) {
+                                            @if(0 == util.quantidadeDeMetasNaoAlcancadasNaSemana(semana, metas)) {
                                                 Nenhuma meta para alcançar
                                             } else {
                                                 @for(meta <- metas) {
